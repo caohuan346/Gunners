@@ -1,0 +1,29 @@
+//
+//  PrefixHeader.pch
+//  TheGunners
+//
+//  Created by Happy on 14/10/21.
+//  Copyright (c) 2014年 Happy. All rights reserved.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef DEBUG
+#else
+#define NSLog(...){};
+#endif
+
+#ifdef __OBJC__
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+#import "Define.h"
+#import "AppConfig.h"
+#import "GunnersAFManager.h"
+
+#endif
