@@ -46,6 +46,34 @@
               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /**
+ *  钱一百接口访问
+ *
+ *  @param methodName methodName
+ *  @param parameters parameters
+ *  @param success    success callback
+ *  @param failure    failure callback
+ */
+- (void)getHttpMethod:(NSString *)methodName
+            parameters:(id)parameters
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+/**
+ *  钱一百接口访问
+ *
+ *  @param methodName methodName
+ *  @param uniqueTag  同类methodName请求，标记唯一
+ *  @param parameters parameters
+ *  @param success    success callback
+ *  @param failure    failure callback
+ */
+- (void)getHttpMethod:(NSString *)methodName
+             uniqueTag:(NSString *)uniqueTag
+            parameters:(id)parameters
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+/**
  *  取消请求：针对列表异步重复请求
  *
  *  @param methodName 接口名称

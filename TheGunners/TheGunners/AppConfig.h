@@ -19,10 +19,16 @@
 /////////////////////////////////////////// 接口配置 ////////////////////////////////////////////
 #define kHttpBaseURL @"http://rwsa.sinaapp.com/api/"       //base url
 
-#define kHttpServer @"www.qian100.com"
+#define kHttpServer @"http://rwsa.sinaapp.com"
 
-//首页列表参数
+//注册
+#define kHttpMethod_userRegister @"user/register"
+//登录
+#define kHttpMethod_userLogin @"user/login"
+//文章列表参数
 #define kHttpMethod_articleList @"article/list"
+//文章详情
+#define kHttpMethod_articleDetail @"article/get"
 
 /////////////////////////////////////////// 界面配置 ////////////////////////////////////////////
 //背景色

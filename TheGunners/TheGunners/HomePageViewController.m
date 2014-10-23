@@ -12,6 +12,11 @@
 
 #import "MJRefresh.h"
 #import "GunnersAFManager.h"
+#import "HomeNewsCell.h"
+
+#import "NewsDetailViewController.h"
+
+#define kPageSize 10
 
 @interface HomePageViewController ()<HMBannerViewDelegate>{
     BOOL _isHeaderRereshing;    //是否下拉更新
@@ -22,6 +27,9 @@
     
     HMBannerView *_bannerView;
 }
+
+@property (nonatomic, strong) NSMutableArray *recordArray;
+
 @end
 
 @implementation HomePageViewController
@@ -29,12 +37,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.recordArray = [NSMutableArray array];
+    
     [self initBannerView:nil];
+    
+    
+    [self setupRefresh];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-     [self loadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -45,90 +57,73 @@
 #pragma mark - private
 - (void) loadData {
     //digest=1&startPos=0&pageSize=1
-    NSDictionary *parameters = @{@"digest": @1,
-                                 @"startPos": @0,
-                                 @"pageSize": @10
+
+    NSDictionary *parameters = @{@"startPos": [NSNumber numberWithInt: _pageIndex * kPageSize],
+                                 @"pageSize": [NSNumber numberWithInt:kPageSize]
                                  };
-    [[GunnersAFManager sharedInstance] GET:@"http://rwsa.sinaapp.com/api/article/list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[GunnersAFManager sharedInstance] getHttpMethod:kHttpMethod_articleList parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        NSDictionary *resultDic = responseObject;
-        NSLog(@"%@",resultDic);
+         [self handleLoadedResult:responseObject];
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"%@",error.userInfo);
+         NSLog(@"%@",error.userInfo);
     }];
-    /*
-     self.responseSerializer = [[AFHTTPResponseSerializer alloc] init];
-     [self.requestSerializer setValue:@"text/xml; charset=utf-8" forHTTPHeaderField:@"content-type"];
-     */
+
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 20;
+    return self.recordArray.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"homeCell" forIndexPath:indexPath];
+    HomeNewsCell *cell = [tableView dequeueReusableCellWithIdentifier:@"homeCell" forIndexPath:indexPath];
     
     // Configure the cell...
+    /*
+     
+     {
+         author = "";
+         "category_id" = 8;
+         "category_name" = "\U8db3\U5f69";
+         digest = a;
+         id = 52;
+         likes = 0;
+         pubdate = "2014-10-22 22:56:17";
+         thumbnail = "http://rwsa.qiniudn.com/articles/1413989728-banner01.png";
+         title = "\U4e09\U4eba\U5408\U4e70\U8db3\U5f69\U4e2d\U5927\U5956 \U91d1\U534e\U6d66\U6c5f\U5f69\U6c11\U6536\U83b754\U4e07\U5143";
+         unlikes = 0;
+     }
+     
+     */
+    NSDictionary *newInfoDic = self.recordArray[indexPath.row];
+    
+    SDImageCache *imageCache = [SDImageCache sharedImageCache];
+    
+    NSURL *imageURL = [NSURL URLWithString:newInfoDic[@"thumbnail"]];
+    
+    if ([imageCache diskImageExistsWithKey:[imageURL absoluteString]]) {
+        [cell.newsImageView setImage:[imageCache imageFromDiskCacheForKey:[imageURL absoluteString]]];
+    } else {
+        [cell.newsImageView sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"news_image_holder"]];
+    }
+    
+    cell.newsTitleLabel.text = newInfoDic[@"title"];
+    cell.newsDetailLabel.text = newInfoDic[@"digest"];
     
     return cell;
 }
 
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+#pragma mark - Table View Delegate
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self performSegueWithIdentifier:@"toNewsDetail" sender:self];
 }
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 #pragma mark - private
 - (void)initBannerView:(NSArray *)bannerList
@@ -173,6 +168,62 @@
     }
 }
 
+-(void) handleLoadedResult:(NSDictionary *)resultDic
+{
+    NSInteger successFlag = [resultDic[@"errcode"] integerValue];
+    if (successFlag == 0)
+    {
+        NSArray *resutArray = resultDic[@"result"];
+        if (resutArray.count>0)
+        {
+            if (_isHeaderRereshing)
+            {
+                [self.recordArray setArray:resutArray];
+                _pageIndex = 1;
+            }
+            else
+            {
+                [self.recordArray addObjectsFromArray:resutArray];
+                _pageIndex++;
+            }
+            
+            //[self.tableView reloadData];
+            [self endRefresh];
+        }
+        else{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.tableView headerEndRefreshing];
+                [self.tableView footerEndRefreshing];
+            });
+        }
+    }
+    else
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.tableView headerEndRefreshing];
+            [self.tableView footerEndRefreshing];
+        });
+    }
+}
+
+-(void)endRefresh
+{
+    if (_isHeaderRereshing)
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            [self.tableView headerEndRefreshing];
+        });
+    }
+    else
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            [self.tableView footerEndRefreshing];
+        });
+    }
+}
+
 #pragma mark HMBannerView Delegate
 - (void)imageCachedDidFinish:(HMBannerView *)bannerView
 {
@@ -198,16 +249,53 @@
     }
 }
 
+#pragma mark - MJRefresh
+/**
+ *  集成刷新控件
+ */
+- (void)setupRefresh
+{
+    [self.tableView addHeaderWithTarget:self action:@selector(headerRereshing)];
+    [self.tableView headerBeginRefreshing];
+    [self.tableView addFooterWithTarget:self action:@selector(footerRereshing)];
+}
 
-/*
+#pragma mark 开始进入刷新状态
+- (void)headerRereshing
+{
+    [[GunnersAFManager sharedInstance] cancelHttpMethod:kHttpMethod_articleList];
+    
+    _isHeaderRereshing = YES;
+    _pageIndex = 0;
+    _tempPageIndex = 1;
+    [self loadData];
+}
+
+- (void)footerRereshing
+{
+    [[GunnersAFManager sharedInstance] cancelHttpMethod:kHttpMethod_articleList];
+    
+    _isHeaderRereshing = NO;
+    
+    _tempPageIndex = _pageIndex + 1;
+    [self loadData];
+    
+}
+
+
+
  #pragma mark - Navigation
- 
+
  // In a storyboard-based application, you will often want to do a little preparation before navigation
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
+     if ([segue.identifier isEqualToString:@"toNewsDetail"]) {
+         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+         
+         NewsDetailViewController *detailViewCtl = segue.destinationViewController;
+         detailViewCtl.newsInfoDic = self.recordArray[indexPath.row];
+     }
  }
- */
+
 
 @end
 

@@ -25,6 +25,7 @@
 		5926410D19F65953005B1050 /* NSData+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 5926410C19F65953005B1050 /* NSData+GIF.m */; };
 		5926411119F65D7E005B1050 /* HFStretchableTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5926411019F65D7E005B1050 /* HFStretchableTableHeaderView.m */; };
 		5926411419F65E5A005B1050 /* MySiteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5926411319F65E5A005B1050 /* MySiteViewController.m */; };
+		59E84D8C19F8FD0D0029952A /* NewsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59E84D8B19F8FD0D0029952A /* NewsDetailViewController.m */; };
 		59EC54A419F636B400466DFF /* GunnerFansViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59EC54A319F636B400466DFF /* GunnerFansViewController.m */; };
 		59EC54AF19F636E500466DFF /* BaseNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59EC54A619F636E500466DFF /* BaseNavigationViewController.m */; };
 		59EC54B019F636E500466DFF /* HomeNavgationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59EC54A819F636E500466DFF /* HomeNavgationViewController.m */; };
@@ -90,6 +91,8 @@
 		5926411019F65D7E005B1050 /* HFStretchableTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HFStretchableTableHeaderView.m; sourceTree = "<group>"; };
 		5926411219F65E5A005B1050 /* MySiteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySiteViewController.h; sourceTree = "<group>"; };
 		5926411319F65E5A005B1050 /* MySiteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySiteViewController.m; sourceTree = "<group>"; };
+		59E84D8A19F8FD0D0029952A /* NewsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewsDetailViewController.h; path = ZSDWebViewController/NewsDetailViewController.h; sourceTree = "<group>"; };
+		59E84D8B19F8FD0D0029952A /* NewsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewsDetailViewController.m; path = ZSDWebViewController/NewsDetailViewController.m; sourceTree = "<group>"; };
 		59EC54A219F636B400466DFF /* GunnerFansViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GunnerFansViewController.h; sourceTree = "<group>"; };
 		59EC54A319F636B400466DFF /* GunnerFansViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GunnerFansViewController.m; sourceTree = "<group>"; };
 		59EC54A519F636E500466DFF /* BaseNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNavigationViewController.h; sourceTree = "<group>"; };
@@ -281,6 +284,8 @@
 				47E9975219F7DA4300204374 /* HomePageViewController.m */,
 				47E196C119F7F33B00F9CB38 /* HomeNewsCell.h */,
 				47E196C219F7F33B00F9CB38 /* HomeNewsCell.m */,
+				59E84D8A19F8FD0D0029952A /* NewsDetailViewController.h */,
+				59E84D8B19F8FD0D0029952A /* NewsDetailViewController.m */,
 			);
 			name = HomePage;
 			sourceTree = "<group>";
@@ -537,6 +542,7 @@
 				59EC54BB19F63F6C00466DFF /* UIImage+ImageWithColor.m in Sources */,
 				5926410319F649C5005B1050 /* HMBannerView.m in Sources */,
 				47E9975719F7DD7700204374 /* GunnersAFManager.m in Sources */,
+				59E84D8C19F8FD0D0029952A /* NewsDetailViewController.m in Sources */,
 				59F171C119F6349A00E70266 /* AppDelegate.m in Sources */,
 				59EC54AF19F636E500466DFF /* BaseNavigationViewController.m in Sources */,
 				59EC54B119F636E500466DFF /* GunnerFansNavgationViewController.m in Sources */,

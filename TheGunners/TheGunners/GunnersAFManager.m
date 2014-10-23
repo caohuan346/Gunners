@@ -19,7 +19,6 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedInstance = [[self alloc] init];
-        
     });
     return _sharedInstance;
 }
@@ -34,7 +33,7 @@
     return self;
 }
 
-#pragma mark - simple http access
+#pragma mark - POST
 -(void)postHttpMethod:(NSString *)methodName
           parameters:(id)parameters
              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
@@ -66,26 +65,6 @@
     [self postHttpMethod:methodName uniqueTag:nil parameters:parameters success:success failure:failure];
 }
 
-- (BOOL)cancelHttpMethod:(NSString*)methodName
-{
-    /*
-    NSArray *array=[self.operationQueue operations];
-    for (AFHTTPRequestOperation *operation in array)
-    {
-        NSString *methodInfo = [self.requestSerializer HTTPRequestHeaders][@"methodName"];
-        if ([methodInfo rangeOfString:methodName].location != NSNotFound)
-        {
-            [operation cancel];
-            return YES;
-        }
-    }
-    
-    return NO;
-     */
-    
-    return [self cancelHttpMethod:methodName uniqueTag:nil];
-}
-
 - (void)postHttpMethod:(NSString *)methodName
             uniqueTag:(NSString *)uniqueTag
            parameters:(id)parameters
@@ -109,6 +88,44 @@
     
     AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
     [self.operationQueue addOperation:operation];
+}
+
+#pragma mark - GET
+- (void)getHttpMethod:(NSString *)methodName
+           parameters:(id)parameters
+              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure{
+    [self getHttpMethod:methodName uniqueTag:nil parameters:parameters success:success failure:failure];
+}
+
+- (void)getHttpMethod:(NSString *)methodName
+            uniqueTag:(NSString *)uniqueTag
+           parameters:(id)parameters
+              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure{
+    NSString *urlString = [kHttpBaseURL stringByAppendingPathComponent:methodName];
+    NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"GET" URLString:[[NSURL URLWithString:urlString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:nil];
+    [request setTimeoutInterval:kRequestTimeOut];
+    
+    if (uniqueTag && uniqueTag.length > 0)
+    {
+        [self.requestSerializer setValue:[NSString stringWithFormat:@"%@_%@",methodName,uniqueTag] forHTTPHeaderField:@"methodName"];
+    }
+    else
+    {
+        [self.requestSerializer setValue:methodName forHTTPHeaderField:@"methodName"];
+    }
+
+    
+    AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
+    [self.operationQueue addOperation:operation];
+}
+
+#pragma mark - cancel
+
+- (BOOL)cancelHttpMethod:(NSString*)methodName
+{
+    return [self cancelHttpMethod:methodName uniqueTag:nil];
 }
 
 - (BOOL)cancelHttpMethod:(NSString*)methodName uniqueTag:(NSString *)uniqueTag

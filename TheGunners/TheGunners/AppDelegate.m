@@ -99,14 +99,14 @@
     nav1.tabBarItem.title = @"红白视野";
     //Tab2
     GunnerFansViewController *investmentList = [mainSB instantiateViewControllerWithIdentifier:@"GunnerFansViewController"];
-    investmentList.tabBarItem.title = @"枪迷心声";
-    investmentList.title = @"枪迷心声";
+    investmentList.tabBarItem.title = @"枪坛思语";
+    investmentList.title = @"枪坛思语";
     GunnerFansNavgationViewController *nav2 = [[GunnerFansNavgationViewController alloc]  initWithRootViewController:investmentList];
     
     //Tab3
     MySiteViewController *mySite = [mainSB instantiateViewControllerWithIdentifier:@"MySiteViewController"];
-    mySite.tabBarItem.title = @"我的手枪";
-    mySite.title = @"我的手枪";
+    mySite.tabBarItem.title = @"枪迷圣殿";
+    mySite.title = @"枪迷圣殿";
     MySiteNavgationViewController *nav3 = [[MySiteNavgationViewController alloc] initWithRootViewController:mySite];
     tabViewController.viewControllers = @[nav1,nav2,nav3];
     

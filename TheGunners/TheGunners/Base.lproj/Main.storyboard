@@ -19,12 +19,12 @@
                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeCell" rowHeight="72" id="mEQ-he-snH">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeCell" rowHeight="72" id="mEQ-he-snH" customClass="HomeNewsCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mEQ-he-snH" id="kJF-hJ-dS6">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="holder" translatesAutoresizingMaskIntoConstraints="NO" id="Kdh-bp-3Ng">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="news_image_holder" translatesAutoresizingMaskIntoConstraints="NO" id="Kdh-bp-3Ng">
                                             <rect key="frame" x="10" y="10" width="70" height="52"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="70" id="1DS-Yw-eyR"/>
@@ -46,7 +46,7 @@
                                                 <constraint firstAttribute="height" constant="28" id="m3M-lo-L14"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -61,6 +61,11 @@
                                         <constraint firstItem="mYx-pC-mtc" firstAttribute="leading" secondItem="Kdh-bp-3Ng" secondAttribute="trailing" constant="10" id="xEb-Th-bP4"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="newsDetailLabel" destination="mYx-pC-mtc" id="deH-bm-0bx"/>
+                                    <outlet property="newsImageView" destination="Kdh-bp-3Ng" id="vpu-d0-duC"/>
+                                    <outlet property="newsTitleLabel" destination="tnz-RS-Yjd" id="frI-kL-SQY"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -71,11 +76,47 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="homeTopView" destination="M05-mT-vc3" id="BMb-f4-hQO"/>
+                        <segue destination="JNz-7z-rSI" kind="push" identifier="toNewsDetail" id="LCr-aJ-Ivj"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Knx-vG-89I" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-7490" y="-4109"/>
+        </scene>
+        <!--News Detail View Controller-->
+        <scene sceneID="Fih-DU-kOZ">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="JNz-7z-rSI" customClass="NewsDetailViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="AaK-6L-X0E"/>
+                        <viewControllerLayoutGuide type="bottom" id="W79-ec-rHc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yet-Rt-Vdf">
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MHY-cc-byz">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="W79-ec-rHc" firstAttribute="top" secondItem="MHY-cc-byz" secondAttribute="bottom" id="JmC-fc-5uz"/>
+                            <constraint firstItem="MHY-cc-byz" firstAttribute="top" secondItem="yet-Rt-Vdf" secondAttribute="top" id="TRh-K4-icK"/>
+                            <constraint firstItem="MHY-cc-byz" firstAttribute="leading" secondItem="yet-Rt-Vdf" secondAttribute="leading" id="sql-YE-T9T"/>
+                            <constraint firstAttribute="trailing" secondItem="MHY-cc-byz" secondAttribute="trailing" id="yKk-mN-Cgn"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="azJ-3i-YtY"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="webView" destination="MHY-cc-byz" id="8uf-Ng-iNr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="u4a-z1-bdX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-7001" y="-4109"/>
         </scene>
         <!--Gunner Fans View Controller-->
         <scene sceneID="Fbv-ms-nGI">
@@ -263,9 +304,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="holder" width="70" height="52"/>
         <image name="icon_default" width="54" height="54"/>
         <image name="image" width="400" height="400"/>
+        <image name="news_image_holder" width="70" height="52"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
